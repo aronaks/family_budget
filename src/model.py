@@ -1,4 +1,6 @@
 import sqlite3
+import os
+import errno
 import decimal
 
 
@@ -9,7 +11,14 @@ class DBConnection(object):
         sqlite3.register_adapter(float, self._adapt_decimal)
         sqlite3.register_converter('money_type', self._convert_to_money)
 
-        self.conn = sqlite3.connect('db_for_entities/budget_db',
+        db_dir = 'db_for_entities'
+        try:
+            os.makedirs(db_dir)
+        except OSError as e:
+            if e.errno != errno.EEXIST:
+                raise
+
+        self.conn = sqlite3.connect(os.path.join(db_dir, 'budget_db'),
                                     detect_types=sqlite3.PARSE_DECLTYPES)
         with self.conn:
             self.c = self.conn.cursor()
