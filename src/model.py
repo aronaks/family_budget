@@ -11,7 +11,9 @@ class DBConnection(object):
         sqlite3.register_adapter(float, self._adapt_decimal)
         sqlite3.register_converter('money_type', self._convert_to_money)
 
-        db_dir = 'db_for_entities'
+        db_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..',
+                                              'db_for_entities'))
+
         try:
             os.makedirs(db_dir)
         except OSError as e:
