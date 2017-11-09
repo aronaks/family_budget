@@ -9,5 +9,5 @@ For now the app can be run on macOS or Windows using python3.x
 
 `git clone https://github.com/aronaks/family_budget.git`
 
-`python3 family_budget/run.py`
+`python3 family_budget/familybudget.py`
 
