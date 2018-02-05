@@ -45,7 +45,7 @@ class TopLevelBasic(tk.Toplevel):
         tk.Label(self, textvariable=self.total_content).grid(row=1, column=1)
 
     def set_total_amount(self, amount):
-        locale.setlocale(locale.LC_ALL, 'uk_UA')
+        locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
         money = locale.currency(amount)
         self.total_content.set(money)
 
