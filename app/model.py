@@ -30,8 +30,23 @@ class DBConnection(object):
                              date TEXT,
                              amount money_type,
                              comment TEXT,
-                             total money_type
-                            )""")
+                             total money_type,
+                             last_modified DATETIME
+                            );""")
+
+            self.c.execute("""CREATE TRIGGER IF NOT EXISTS insert_last_modified 
+            AFTER INSERT ON budget
+            BEGIN
+              UPDATE budget SET last_modified = DATETIME('NOW')
+              WHERE rowid = new.rowid;
+            END;""")
+
+            self.c.execute("""CREATE TRIGGER IF NOT EXISTS update_last_modified 
+            AFTER UPDATE ON budget
+            BEGIN
+              UPDATE budget SET last_modified = DATETIME('NOW')
+              WHERE rowid = new.rowid;
+            END;""")
 
     @staticmethod
     def _convert_to_money(entry):
@@ -48,7 +63,8 @@ class DBConnection(object):
     @property
     def last_total_amount(self):
         with self.conn:
-            self.c.execute("SELECT * FROM budget ORDER BY id DESC LIMIT 1;")
+            self.c.execute("""SELECT * FROM budget ORDER BY last_modified 
+            DESC LIMIT 1;""")
             res = self.c.fetchone()
         if res is None:
             return 0
@@ -69,3 +85,13 @@ class DBConnection(object):
             self.c.execute("SELECT * FROM budget ORDER BY id;")
             res = self.c.fetchall()
         return res
+
+    def update_record(self, item_id, date, amount, comment, total_amount):
+        with self.conn:
+            self.c.execute("""UPDATE budget
+                             SET date = ?,
+                             amount = ?,
+                             comment = ?,
+                             total = ?
+                            WHERE id = ?;""",
+                           (date, amount, comment, total_amount, item_id))
