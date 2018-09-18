@@ -10,17 +10,21 @@ class DBConnection(object):
 
         sqlite3.register_adapter(float, self._adapt_decimal)
         sqlite3.register_converter('money_type', self._convert_to_money)
+        self.conn = None
+        self.c = None
+        self.connect_to_db()
 
+    def connect_to_db(self, current_currency='UAH'):
         db_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                               'db_for_entities'))
-
         try:
             os.makedirs(db_dir)
         except OSError as e:
             if e.errno != errno.EEXIST:
                 raise
-
-        self.conn = sqlite3.connect(os.path.join(db_dir, 'budget_db'),
+        db_name_postfix = current_currency.lower()
+        self.conn = sqlite3.connect(os.path.join(db_dir, 'budget_db_' +
+                                                 db_name_postfix),
                                     detect_types=sqlite3.PARSE_DECLTYPES)
         with self.conn:
             self.c = self.conn.cursor()

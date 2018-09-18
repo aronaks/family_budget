@@ -7,6 +7,8 @@ class MainWindow(tk.Frame):
         self.pack()
 
         self.vc = vc
+
+        self.currency_value = tk.StringVar(self)
         self.make_widgets()
 
     def make_widgets(self):
@@ -16,3 +18,9 @@ class MainWindow(tk.Frame):
             fill=tk.X, pady=5)
         tk.Button(self, text='Archive', command=self.vc.open_archive).pack(
             fill=tk.X, pady=5)
+
+        self.currency_value.set(list(self.vc.all_currency_values.keys())[0])
+        w = tk.OptionMenu(self, self.currency_value,
+                          *self.vc.all_currency_values.keys())
+        w.pack(fill=tk.X, pady=5)
+        self.currency_value.trace('w', self.vc.change_currency)

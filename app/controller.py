@@ -11,18 +11,21 @@ from app.view_validation import TopLevelValidation
 
 class FamilyBudgetController(object):
     def __init__(self, parent):
+        self.all_currency_values = {"UAH": "uk_UA.UTF-8",
+                                    "USD": "en_US.UTF-8",
+                                    "EUR": "eu_ES.UTF-8"}
         self.wins = [parent]
         self.model = DBConnection(self)
         self.view = MainWindow(self)
 
         self.validation_win = None
-
         self.center_main_window(parent)
 
         self.datetime_now = datetime.datetime.now().strftime("%d/%m/%Y")
 
+
     @staticmethod
-    def center_main_window(obj, width=200, height=115):
+    def center_main_window(obj, width=200, height=155):
         screen_width = obj.winfo_screenwidth()
         screen_height = obj.winfo_screenheight()
         x = (screen_width / 2) - (width / 2)
@@ -153,3 +156,13 @@ class FamilyBudgetController(object):
 
         self.wins[-1].data_tree.delete(*self.wins[-1].data_tree.get_children())
         self.show_stored_data()
+
+    def change_currency(self, *args):
+        chosen_currency = self.view.currency_value.get()
+        self.model.connect_to_db(chosen_currency)
+
+    @property
+    def locale_value(self):
+        chosen_currency = self.view.currency_value.get()
+        locale_value = self.all_currency_values[chosen_currency]
+        return locale_value

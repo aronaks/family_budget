@@ -45,7 +45,7 @@ class TopLevelBasic(tk.Toplevel):
         tk.Label(self, textvariable=self.total_content).grid(row=1, column=1)
 
     def set_total_amount(self, amount):
-        locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
+        locale.setlocale(locale.LC_ALL, self.vc.locale_value)
         money = locale.currency(amount)
         self.total_content.set(money)
 
@@ -122,7 +122,7 @@ class TopLevelShowingInfo(tk.Toplevel):
                               values=(row[1], row[2], row[3]))
 
     def set_total_amount(self, amount):
-        locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
+        locale.setlocale(locale.LC_ALL, self.vc.locale_value)
         money = locale.currency(amount)
         self.total_content.set(money)
 
@@ -168,6 +168,6 @@ class TopLevelEditArchiveItem(tk.Toplevel):
             col_num += 1
 
     def set_total_amount(self, amount):
-        locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
+        locale.setlocale(locale.LC_ALL, self.vc.locale_value)
         money = locale.currency(amount)
         self.total_content.set(money)
