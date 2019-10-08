@@ -23,7 +23,6 @@ class FamilyBudgetController(object):
 
         self.datetime_now = datetime.datetime.now().strftime("%d/%m/%Y")
 
-
     @staticmethod
     def center_main_window(obj, width=200, height=155):
         screen_width = obj.winfo_screenwidth()
